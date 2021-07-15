@@ -1,0 +1,130 @@
+---
+title: "rGenomeTracks"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rGenomeTracks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+rGenomeTracks package leverages the power of [pyGenomeTracks](https://github.com/deeptools/pyGenomeTracks) software
+with the interactivity of R.
+[pyGenomeTracks](https://github.com/deeptools/pyGenomeTracks) is a python software
+that offers robust method for visualizing
+epigenetic data files like narrowPeak, Hic matrix, TADs and arcs, however though,
+here is no way currently to use it within R interactive session.
+rGenomeTracks wrapped the whole functionality of pyGenomeTracks with additional utilites
+to make to more pleasant for R users.
+
+## Installing PyGenomeTracks
+You should have pyGenomeTracks installed on your system. To avoid dependency clash, 
+we highly recommed using miniconda. rGenomeTracks automatically install this dependency for you. You might be prompt 
+to install miniconda on your system if not already installed later in this this example. 
+If this step failed, you can manually install pyGenomeTracks either via reticulate or your commandline.
+
+
+```{r setup}
+# loading the rGenomeTracks
+library(rGenomeTracks)
+```
+
+## Principle
+rGenomeTracks deals creates tracks in a class `genome_track`. Currently, there are 14 tracks available:
+1. track_bed()
+2. track_bedgraph()
+3. track_bedgraph_matrix()
+4. track_gtf()
+5. track_hlines()
+6. track_spacer()
+7. track_bigwig()
+8. track_epilogos()
+9. track_narrowPeak()
+10. track_domains()
+11. track_hic_matrix()
+12. track_links()
+13. track_scalebar()
+14. track_x_axis()
+
+Please refer to the help page for each one of them for details and examples.
+
+
+```{r eval=FALSE}
+# Download h5 example
+ h5_dir <- tempfile(fileext = ".h5")
+download.file("https://github.com/deeptools/pyGenomeTracks/raw/488a6d3f9e81c6ca1af9f90484445070ed9c7024/pygenometracks/tests/test_data/Li_et_al_2015.h5", destfile = h5_dir)
+ 
+ # Load other examples
+ tads_dir <- system.file("extdata", "tad_classification.bed", package = "rGenomeTracks")
+ arcs_dir <- system.file("extdata", "links2.links", package = "rGenomeTracks")
+ bw_dir <- system.file("extdata", "bigwig2_X_2.5e6_3.5e6.bw", package = "rGenomeTracks")
+ 
+ # Create HiC track from HiC matrix
+ h5 <- track_hic_matrix(
+   file = h5_dir, depth = 250000, min_value = 5, max_value = 200,
+   transform = "log1p", show_masked_bins = FALSE
+ )
+
+ # Create TADS track
+ tads <- track_domains(
+   file = tads_dir, border_color = "black",
+   color = "none", height = 5,
+   line_width = 5,
+   show_data_range = FALSE,
+   overlay_previous = "share-y"
+ )
+
+ # Create arcs track
+ arcs <- track_links(
+   file = arcs_dir, links_type = "triangles",
+   line_style = "dashed",
+   overlay_previous = "share-y",
+   color = "darkred",
+   line_width = 3,
+   show_data_range = FALSE
+ )
+
+ # Create bigwig track
+ bw <- track_bigwig(
+   file = bw_dir, color = "red",
+   max_value = 50,
+   min_value = 0,
+   height = 4,
+   overlay_previous = "yes",
+   show_data_range = FALSE
+ )
+
+```
+
+
+
+`genome_track` objects can be added together using `+` function. 
+ 
+```{r eval=FALSE}
+ # Create one object from HiC, arcs and bigwid
+ tracks <- h5 + arcs + bw
+```
+
+
+The track(s) to be plotted is to be passed to `plot_gtracks()`
+for the generation of the plot. Additionally, `plot_gtracks()` requires the genomic region to be plotted. Optionally, you can set plot title, dpi, width, height, fontsize, track-to-label fraction, label alignment position, and directory to save the plot.
+ 
+```{r eval=FALSE}
+ # Plot the tracks
+## Note to verify installing miniconda if not installed.
+ plot_gtracks(tracks, chr = "X", start = 25 * 10^5, end = 31 * 10^5 )
+
+ # Plot HiC, TADS and bigwig tracks
+ plot_gtracks(h5 + tads + bw, chr = "X", start = 25 * 10^5, end = 31 * 10^5)
+
+```
+
+```{r echo=FALSE}
+plot(imager::load.image(system.file("extdata", "images/example1.png", package = "rGenomeTracks")), axes = FALSE)
+plot(imager::load.image(system.file("extdata", "images/example2.png", package = "rGenomeTracks")), axes = FALSE)
+```
