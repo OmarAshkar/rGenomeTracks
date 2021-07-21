@@ -53,23 +53,28 @@ rGenomeTracks deals creates tracks in a class `genome_track`. Currently, there a
 
 Please refer to the help page for each one of them for details and examples.
 
-
+We will download .h5 matrix and store the location in temporary directory for demonstration.
 ```{r eval=FALSE}
 # Download h5 example
  h5_dir <- tempfile(fileext = ".h5")
 download.file("https://github.com/deeptools/pyGenomeTracks/raw/488a6d3f9e81c6ca1af9f90484445070ed9c7024/pygenometracks/tests/test_data/Li_et_al_2015.h5", destfile = h5_dir)
- 
- # Load other examples
- tads_dir <- system.file("extdata", "tad_classification.bed", package = "rGenomeTracks")
- arcs_dir <- system.file("extdata", "links2.links", package = "rGenomeTracks")
- bw_dir <- system.file("extdata", "bigwig2_X_2.5e6_3.5e6.bw", package = "rGenomeTracks")
- 
+
  # Create HiC track from HiC matrix
  h5 <- track_hic_matrix(
    file = h5_dir, depth = 250000, min_value = 5, max_value = 200,
    transform = "log1p", show_masked_bins = FALSE
  )
 
+```
+
+Other demonstration for TADS, arcs and bigwig data will be loaded from the built-in package example data.
+
+```{r}
+ # Load other examples
+ tads_dir <- system.file("extdata", "tad_classification.bed", package = "rGenomeTracks")
+ arcs_dir <- system.file("extdata", "links2.links", package = "rGenomeTracks")
+ bw_dir <- system.file("extdata", "bigwig2_X_2.5e6_3.5e6.bw", package = "rGenomeTracks")
+ 
  # Create TADS track
  tads <- track_domains(
    file = tads_dir, border_color = "black",
@@ -105,26 +110,31 @@ download.file("https://github.com/deeptools/pyGenomeTracks/raw/488a6d3f9e81c6ca1
 
 `genome_track` objects can be added together using `+` function. 
  
-```{r eval=FALSE}
+```{r}
  # Create one object from HiC, arcs and bigwid
- tracks <- h5 + arcs + bw
+ tracks <- tads + arcs + bw
 ```
 
 
 The track(s) to be plotted is to be passed to `plot_gtracks()`
 for the generation of the plot. Additionally, `plot_gtracks()` requires the genomic region to be plotted. Optionally, you can set plot title, dpi, width, height, fontsize, track-to-label fraction, label alignment position, and directory to save the plot.
  
-```{r eval=FALSE}
+```{r}
  # Plot the tracks
 ## Note to verify installing miniconda if not installed.
  plot_gtracks(tracks, chr = "X", start = 25 * 10^5, end = 31 * 10^5 )
-
+```
+ 
+ ```{r eval=FALSE}
  # Plot HiC, TADS and bigwig tracks
  plot_gtracks(h5 + tads + bw, chr = "X", start = 25 * 10^5, end = 31 * 10^5)
-
 ```
 
 ```{r echo=FALSE}
-plot(imager::load.image(system.file("extdata", "images/example1.png", package = "rGenomeTracks")), axes = FALSE)
 plot(imager::load.image(system.file("extdata", "images/example2.png", package = "rGenomeTracks")), axes = FALSE)
+```
+
+## Session Information 
+```{r}
+sessionInfo()
 ```

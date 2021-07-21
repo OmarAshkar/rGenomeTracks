@@ -15,7 +15,7 @@ track_hic_matrix(
   transform = "no",
   rasterize = TRUE,
   colormap = "RdYlBu_r",
-  depth = 1e+05,
+  depth = 100000,
   show_masked_bins = FALSE,
   scale_factor = 1
 )
