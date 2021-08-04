@@ -21,11 +21,13 @@ Config/reticulate:
     )
   )
 License: GPL (>= 3)
-Depends: R (>= 4.1.0)
+Depends: R (>= 4.1.0),
 Imports:
     imager,
     reticulate,
-    methods
+    methods,
+    rGenomeTracksData
+SystemRequirements: pyGenomeTracks (prefered to use install_pyGenomeTracks())
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

@@ -1,15 +1,6 @@
 #' This is a generic function used to plot `genome_track` objects.
 #' @title Plotting genomic tracks
 #' @param obj Object to be plotted.
-#' @param ... Other parameters to be passed.
-#' @export
-#' @return None
-#' @author Omar Elashkar
-setGeneric("plot_gtracks", function(obj, ...) standardGeneric("plot_gtracks"))
-
-
-#' `plot_gtracks()` is used to plot `genome_track` object.
-#' @title Plot genome-track object
 #' @param obj genome_track object. Define all tracks to be plotted.
 #' @param chr String or numeric value to indicate the chromosome desire.
 #' @param start Numeric. Starting position of plotting on the defined
@@ -30,19 +21,24 @@ setGeneric("plot_gtracks", function(obj, ...) standardGeneric("plot_gtracks"))
 #' @param trackLabelFraction Numeric. Default is 0.05.
 #' @param trackLabelHAlign String. Position of labels aligment. Options are
 #'   "left", "right" or "center". Default is "left".
-#' @importFrom imager load.image
-#' @importFrom reticulate import
-#' @return None
+
+#' @param ... Other parameters to be passed.
 #' @export
+#' @docType methods
+#' @rdname plot_gtracks
+#' @return None
+#' @note For this function to run, you need pyGenomeTracks
+#' installed in R's loading enviroment. If not, please run install_pyGenomeTracks()
 #' @examples
 #' \dontrun{
 #' # Get example data directories
-#' h5_dir <- tempfile(fileext = ".h5")
-#' download.file(
-#'  "https://github.com/deeptools/pyGenomeTracks/raw/488a6d3f9e81c6ca1af9f90484445070ed9c7024/pygenometracks/tests/test_data/Li_et_al_2015.h5",
-#'  destfile = h5_dir)
+#' # Download h5 example
+#' ah <- AnnotationHub()
+#' query(ah, "rGenomeTracksData")
+#' h5_dir <- ah[["AH95901"]]
 #' tads_dir <- system.file("extdata", "tad_classification.bed",
-#'  package = "rGenomeTracks")
+#'   package = "rGenomeTracks"
+#' )
 #' arcs_dir <- system.file("extdata", "links2.links", package = "rGenomeTracks")
 #' bw_dir <- system.file("extdata", "bigwig2_X_2.5e6_3.5e6.bw", package = "rGenomeTracks")
 #' #
@@ -88,6 +84,29 @@ setGeneric("plot_gtracks", function(obj, ...) standardGeneric("plot_gtracks"))
 #' # Plot HiC, TADS and bigwig tracks
 #' plot_gtracks(h5 + tads + bw, chr = "X", start = 25 * 10^5, end = 31 * 10^5)
 #' }
+#' @keywords install_pyGenomeTracks
+#' @author Omar Elashkar
+setGeneric("plot_gtracks", function(obj, chr, start, end,
+                                    dir = NULL,
+                                    plot = TRUE,
+                                    verbose = FALSE,
+                                    dpi = 100,
+                                    title = NULL,
+                                    fontsize = NULL,
+                                    width = 40,
+                                    height = NULL,
+                                    trackLabelFraction = 0.05,
+                                    trackLabelHAlign = "left", ...) {
+  standardGeneric("plot_gtracks")
+})
+
+
+#' @rdname plot_gtracks
+#' @aliases plot_gtracks, genome_track
+#' @importFrom imager load.image
+#' @importFrom reticulate import
+#' @return None
+#' @export
 #' @author Omar Elashkar
 setMethod("plot_gtracks", "genome_track", function(obj,
                                                    chr, start, end,
@@ -101,7 +120,6 @@ setMethod("plot_gtracks", "genome_track", function(obj,
                                                    height = NULL,
                                                    trackLabelFraction = 0.05,
                                                    trackLabelHAlign = "left") {
-
   obj <- obj@tracks
   start <- format(start, scientific = FALSE, trim = TRUE)
   end <- format(end, scientific = FALSE, trim = TRUE)
@@ -156,10 +174,9 @@ setMethod("plot_gtracks", "genome_track", function(obj,
 
   py <- reticulate::import("os")
   py$system(cmd)
-
   if (plot) {
-    plot(imager::load.image(dir), axes = FALSE)
+    img <- imager::load.image(dir)
+    plot(img, axes = FALSE)
   }
   NULL
 })
-

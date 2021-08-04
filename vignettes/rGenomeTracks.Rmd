@@ -22,17 +22,23 @@ here is no way currently to use it within R interactive session.
 rGenomeTracks wrapped the whole functionality of pyGenomeTracks with additional utilites
 to make to more pleasant for R users.
 
-## Installing PyGenomeTracks
-You should have pyGenomeTracks installed on your system. To avoid dependency clash, 
-we highly recommed using miniconda. rGenomeTracks automatically install this dependency for you. You might be prompt 
-to install miniconda on your system if not already installed later in this this example. 
-If this step failed, you can manually install pyGenomeTracks either via reticulate or your commandline.
-
-
 ```{r setup}
 # loading the rGenomeTracks
 library(rGenomeTracks)
+# loading example data
+library(rGenomeTracksData)
 ```
+
+
+## Installing PyGenomeTracks
+You should have pyGenomeTracks installed on R's loading environment. To avoid dependency clash, 
+we highly recommend using `install_pyGenomeTracks()`. That way, you ensure using the tested pyGenomeTracks version with the current release.  rGenomeTracks is supposed to automatically prompt you to install this dependency after running `plot_gtracks()`. If this step failed, you can manually install pyGenomeTracks with `install_pyGenomeTracks()`
+
+```{r eval=FALSE}
+install_pyGenomeTracks()
+```
+
+
 
 ## Principle
 rGenomeTracks deals creates tracks in a class `genome_track`. Currently, there are 14 tracks available:
@@ -56,8 +62,9 @@ Please refer to the help page for each one of them for details and examples.
 We will download .h5 matrix and store the location in temporary directory for demonstration.
 ```{r eval=FALSE}
 # Download h5 example
- h5_dir <- tempfile(fileext = ".h5")
-download.file("https://github.com/deeptools/pyGenomeTracks/raw/488a6d3f9e81c6ca1af9f90484445070ed9c7024/pygenometracks/tests/test_data/Li_et_al_2015.h5", destfile = h5_dir)
+ah <- AnnotationHub()
+query(ah, "rGenomeTracksData")
+h5_dir <-  ah[["AH95901"]]
 
  # Create HiC track from HiC matrix
  h5 <- track_hic_matrix(

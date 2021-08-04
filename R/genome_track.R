@@ -21,3 +21,27 @@ setMethod(
     }
   }
 )
+
+#' @description Install pyGenomeTracks dependency for plot_gtracks()
+#' @details The function will install miniconda if does not exits and
+#' check pyGenomeTracks installation.
+#' @title Install pyGenomeTracks Dependency
+#' @return None
+#' @export
+#' @keywords plot_gtracks
+#' @examples
+#' \dontrun{
+#' install_pyGenomeTracks()
+#' }
+#' @importFrom reticulate install_miniconda
+#' @importFrom reticulate py_install
+#' @author Omar Elashkar
+install_pyGenomeTracks <- function() {
+  tryCatch(install_miniconda(),
+    finally = py_install("pyGenomeTracks",
+      method = "conda",
+      pip = TRUE,
+      version = 3.6
+    )
+  )
+}

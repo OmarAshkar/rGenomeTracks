@@ -72,6 +72,62 @@ obtain an aesthetically pleasant output.
 scale argument scales the matrix by specific factor.
 This is useful if plotting multiple hic-matrices to be on the same scale.
 }
+\examples{
+\dontrun{
+# Get example data directories
+# Download h5 example
+ah <- AnnotationHub()
+query(ah, "rGenomeTracksData")
+h5_dir <- ah[["AH95901"]]
+tads_dir <- system.file("extdata", "tad_classification.bed",
+  package = "rGenomeTracks"
+)
+arcs_dir <- system.file("extdata", "links2.links", package = "rGenomeTracks")
+bw_dir <- system.file("extdata", "bigwig2_X_2.5e6_3.5e6.bw", package = "rGenomeTracks")
+#
+# Create HiC track from HiC matrix
+h5 <- track_hic_matrix(
+  file = h5_dir, depth = 250000, min_value = 5, max_value = 200,
+  transform = "log1p", show_masked_bins = FALSE
+)
+
+# Create TADS track
+tads <- track_domains(
+  file = tads_dir, border_color = "black",
+  color = "none", height = 5,
+  line_width = 5,
+  show_data_range = FALSE,
+  overlay_previous = "share-y"
+)
+
+# Create arcs track
+arcs <- track_links(
+  file = arcs_dir, links_type = "triangles", line_style = "dashed",
+  overlay_previous = "share-y",
+  color = "darkred",
+  line_width = 3,
+  show_data_range = FALSE
+)
+
+# Create bigwig track
+bw <- track_bigwig(
+  file = bw_dir, color = "red",
+  max_value = 50,
+  min_value = 0,
+  height = 4,
+  overlay_previous = "yes",
+  show_data_range = FALSE
+)
+
+# Create one object from HiC, arcs and bigwid
+tracks <- h5 + arcs + bw
+
+# Plot the tracks
+plot_gtracks(tracks, chr = "X", start = 25 * 10^5, end = 31 * 10^5)
+# Plot HiC, TADS and bigwig tracks
+plot_gtracks(h5 + tads + bw, chr = "X", start = 25 * 10^5, end = 31 * 10^5)
+}
+}
 \author{
 Omar Elashkar
 }
