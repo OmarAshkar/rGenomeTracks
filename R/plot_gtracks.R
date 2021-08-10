@@ -21,8 +21,7 @@
 #' @param trackLabelFraction Numeric. Default is 0.05.
 #' @param trackLabelHAlign String. Position of labels aligment. Options are
 #'   "left", "right" or "center". Default is "left".
-
-#' @param ... Other parameters to be passed.
+#' @param ... Extra arguments to be passed for generic plot().
 #' @export
 #' @docType methods
 #' @rdname plot_gtracks
@@ -119,7 +118,7 @@ setMethod("plot_gtracks", "genome_track", function(obj,
                                                    width = 40,
                                                    height = NULL,
                                                    trackLabelFraction = 0.05,
-                                                   trackLabelHAlign = "left") {
+                                                   trackLabelHAlign = "left", ...) {
   obj <- obj@tracks
   start <- format(start, scientific = FALSE, trim = TRUE)
   end <- format(end, scientific = FALSE, trim = TRUE)
@@ -176,7 +175,7 @@ setMethod("plot_gtracks", "genome_track", function(obj,
   py$system(cmd)
   if (plot) {
     img <- imager::load.image(dir)
-    plot(img, axes = FALSE)
+    plot(img, axes = FALSE, ...)
   }
   NULL
 })

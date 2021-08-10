@@ -40,7 +40,8 @@ plot_gtracks(
   width = 40,
   height = NULL,
   trackLabelFraction = 0.05,
-  trackLabelHAlign = "left"
+  trackLabelHAlign = "left",
+  ...
 )
 }
 \arguments{
@@ -78,7 +79,7 @@ tracks height.}
 \item{trackLabelHAlign}{String. Position of labels aligment. Options are
 "left", "right" or "center". Default is "left".}
 
-\item{...}{Other parameters to be passed.}
+\item{...}{Extra arguments to be passed for generic plot().}
 }
 \value{
 None

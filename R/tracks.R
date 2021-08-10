@@ -1,5 +1,5 @@
 #' @description Generate genome_track object from a bed file.
-#' @details `track_bed()` supports all common bed files with minimal of 
+#' @details `track_bed()` supports all common bed files with minimal of
 #' 3 columns and maximum of 12 columns.
 #' @title Generate bed track
 #' @param file String. The location of the track file
@@ -318,6 +318,10 @@ track_bedgraph <- function(file, title = NULL,
 #' @param colormap String with matplotlib-compatible colormap. Default is set to "viridis".
 #' @return genome_track
 #' @export
+#' @examples
+#' IS_dir <- system.file("extdata", package = "rGenomeTracks", "tad_separation_score.bm.gz")
+#' IS <- track_bedgraph_matrix(IS_dir)
+#' plot_gtracks(IS, chr = "X", start = 2000000, end = 3500000)
 #' @note
 #' `fontsize` argument can be overriden by the same argument in `plot_gtracks()`
 #' @importFrom methods getClass is new
@@ -497,7 +501,6 @@ track_bigwig <- function(file,
   new("genome_track", tracks = list(x))
 }
 
-
 #' @description Domain files are bed files represents TADS in the case of HiC analysis.
 #' @details To remove the border, set 'border_color' parameter to "none".
 #' @title Generate domains track
@@ -519,7 +522,6 @@ track_bigwig <- function(file,
 #' )
 #' tracks <- track_x_axis(where = "top") +
 #'   tads + tads_i
-#'
 #' \dontrun{
 #' plot_gtracks(tracks, chr = "X", start = 30 * 10^5, end = 35 * 10^5)
 #' }
