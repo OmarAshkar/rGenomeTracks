@@ -26,7 +26,7 @@ to make to more pleasant for R users.
 # loading the rGenomeTracks
 library(rGenomeTracks)
 # loading example data
-library(rGenomeTracksData)
+#library(rGenomeTracksData)
 ```
 
 
@@ -47,15 +47,16 @@ rGenomeTracks deals creates tracks in a class `genome_track`. Currently, there a
 3. track_bedgraph_matrix()
 4. track_gtf()
 5. track_hlines()
-6. track_spacer()
-7. track_bigwig()
-8. track_epilogos()
-9. track_narrowPeak()
-10. track_domains()
-11. track_hic_matrix()
-12. track_links()
-13. track_scalebar()
-14. track_x_axis()
+6. track_vlines()
+7. track_spacer()
+8. track_bigwig()
+9. track_epilogos()
+10. track_narrowPeak()
+11. track_domains()
+12. track_hic_matrix()
+13. track_links()
+14. track_scalebar()
+15. track_x_axis()
 
 Please refer to the help page for each one of them for details and examples.
 
@@ -129,6 +130,8 @@ Additionally, `plot_gtracks()` requires the genomic region to be plotted. Option
 ```{r eval=FALSE}
  # Plot the tracks
 ## Note to verify installing miniconda if not installed.
+
+ layout(matrix(c(1,1,2,3,4,4), nrow = 3, ncol = 2, byrow = TRUE))
  plot_gtracks(tracks, chr = "X", start = 25 * 10^5, end = 31 * 10^5)
 
 # Plot HiC, TADS and bigwig tracks
@@ -139,6 +142,40 @@ Additionally, `plot_gtracks()` requires the genomic region to be plotted. Option
 plot(imager::load.image(system.file("extdata", "images/example1.png", package = "rGenomeTracks")), axes = FALSE)
 plot(imager::load.image(system.file("extdata", "images/example2.png", package = "rGenomeTracks")), axes = FALSE)
 ```
+
+## Tips 
+### Quickly create multiple tracks 
+If you have tracks with the same format, you can import them quickly by using lapply() and reduce() functions. 
+```{r}
+dirs <- list.files(system.file("extdata", package = "rGenomeTracks"), full.names = T)
+
+# filter only bed files (without bedgraphs or narrowpeaks)
+bed_dirs <- grep(
+  dirs,  pattern = ".bed(?!graph)", perl = T, value = T)
+
+bed_list <- lapply(bed_dirs, track_bed)
+
+bed_tracks <- Reduce("+", beds)
+```
+You can repeat this process for tracks of same category then pass the tracks to plot_gtracks()
+
+### Create complex layout figures 
+You may choose create a complex figure using layout() function then save the device. 
+```{r}
+
+
+```
+
+
+Note that you cannot make use of dir argument in plot_gtracks() if you used this method as it is passed to pyGenomeTracks. So, you have to capture R's graphic device and save it manually.
+
+```{r eval=FALSE}
+png(file = "test.png")
+
+
+dev.off()
+```
+
 
 ## Session Information 
 ```{r}

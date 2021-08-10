@@ -105,8 +105,9 @@ genes <- track_bed(genes_dir,
   height = 7, style = "flybase",
   fontsize = 10
 )
+vlines <- track_vlines(genes_dir)
 \dontrun{
-plot_gtracks(tads + links_overlay + links + genes, chr = "X", start = 30 * 10^5, end = 35 * 10^5)
+plot_gtracks(tads + links_overlay + links + genes + vlines, chr = "X", start = 30 * 10^5, end = 35 * 10^5)
 }
 }
 \author{

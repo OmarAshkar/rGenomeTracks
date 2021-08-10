@@ -867,6 +867,23 @@ track_hlines <- function(y_values,
   new("genome_track", tracks = list(x))
 }
 
+#' @description `track_vlines()` overlay vertical lines over the whole plot. The only parameter to be passed is a bed file.
+#' @title Overlay vertical lines from a bed file
+#' @inheritParams track_bed
+#' @return genome_track
+#' @export
+#' @inherit track_links examples
+#' @importFrom methods getClass is new
+#' @author Omar Elashkar
+track_vlines <- function(file) {
+  x <- list(
+    file = file,
+    type = "vlines"
+  )
+
+  new("genome_track", tracks = list(x))
+}
+
 
 #' @description Generate links track from arc file.
 #' @details
@@ -912,8 +929,9 @@ track_hlines <- function(y_values,
 #'   height = 7, style = "flybase",
 #'   fontsize = 10
 #' )
+#' vlines <- track_vlines(genes_dir)
 #' \dontrun{
-#' plot_gtracks(tads + links_overlay + links + genes, chr = "X", start = 30 * 10^5, end = 35 * 10^5)
+#' plot_gtracks(tads + links_overlay + links + genes + vlines, chr = "X", start = 30 * 10^5, end = 35 * 10^5)
 #' }
 #' @importFrom methods getClass is new
 #' @author Omar Elashkar

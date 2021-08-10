@@ -49,7 +49,6 @@ tads_i <- track_domains(
 )
 tracks <- track_x_axis(where = "top") +
   tads + tads_i
-
 \dontrun{
 plot_gtracks(tracks, chr = "X", start = 30 * 10^5, end = 35 * 10^5)
 }
