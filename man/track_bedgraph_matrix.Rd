@@ -65,7 +65,9 @@ The different options for color maps can be found here: https://matplotlib.org/u
 \examples{
 IS_dir <- system.file("extdata", package = "rGenomeTracks", "tad_separation_score.bm.gz")
 IS <- track_bedgraph_matrix(IS_dir)
+\dontrun{
 plot_gtracks(IS, chr = "X", start = 2000000, end = 3500000)
+}
 }
 \author{
 Omar Elashkar

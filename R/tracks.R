@@ -321,7 +321,9 @@ track_bedgraph <- function(file, title = NULL,
 #' @examples
 #' IS_dir <- system.file("extdata", package = "rGenomeTracks", "tad_separation_score.bm.gz")
 #' IS <- track_bedgraph_matrix(IS_dir)
+#' \dontrun{
 #' plot_gtracks(IS, chr = "X", start = 2000000, end = 3500000)
+#' }
 #' @note
 #' `fontsize` argument can be overriden by the same argument in `plot_gtracks()`
 #' @importFrom methods getClass is new
