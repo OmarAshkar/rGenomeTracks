@@ -138,7 +138,7 @@ setMethod("plot_gtracks", "genome_track", function(obj,
     x <- obj[[i]]
     for (ii in seq_along(x)) {
       if (ii == 1) {
-        cat(paste0("[", basename(x[[ii]]), "]", "\n"), file = conf_file, append = T)
+        cat(paste0("[", basename(x[[ii]]), "]", "\n"), file = conf_file, append = TRUE)
       }
 
       if (!x[ii] %in% c("", "spacer", "x-axis")) {
