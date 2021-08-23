@@ -26,6 +26,7 @@
 #' @docType methods
 #' @rdname plot_gtracks
 #' @return None
+#' @import rGenomeTracksData
 #' @note For this function to run, you need pyGenomeTracks
 #' installed in R's loading enviroment. If not, please run install_pyGenomeTracks()
 #' @examples

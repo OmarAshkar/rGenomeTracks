@@ -147,11 +147,11 @@ plot(imager::load.image(system.file("extdata", "images/example2.png", package = 
 ### Quickly create multiple tracks 
 If you have tracks with the same format, you can import them quickly by using lapply() and reduce() functions. 
 ```{r}
-dirs <- list.files(system.file("extdata", package = "rGenomeTracks"), full.names = T)
+dirs <- list.files(system.file("extdata", package = "rGenomeTracks"), full.names = TRUE)
 
 # filter only bed files (without bedgraphs or narrowpeaks)
 bed_dirs <- grep(
-  dirs,  pattern = ".bed(?!graph)", perl = T, value = T)
+  dirs,  pattern = ".bed(?!graph)", perl = TRUE, value = TRUE)
 
 bed_list <- lapply(bed_dirs, track_bed)
 
