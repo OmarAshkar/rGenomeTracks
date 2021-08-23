@@ -155,26 +155,15 @@ bed_dirs <- grep(
 
 bed_list <- lapply(bed_dirs, track_bed)
 
-bed_tracks <- Reduce("+", beds)
+bed_tracks <- Reduce("+", bed_list)
 ```
 You can repeat this process for tracks of same category then pass the tracks to plot_gtracks()
 
 ### Create complex layout figures 
-You may choose create a complex figure using layout() function then save the device. 
-```{r}
-
-
-```
-
+You may choose create a complex figure using layout() and split.screen() function then save the device. 
 
 Note that you cannot make use of dir argument in plot_gtracks() if you used this method as it is passed to pyGenomeTracks. So, you have to capture R's graphic device and save it manually.
 
-```{r eval=FALSE}
-png(file = "test.png")
-
-
-dev.off()
-```
 
 
 ## Session Information 
