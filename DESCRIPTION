@@ -20,7 +20,7 @@ Config/reticulate:
                  list(package = "pyGenomeTracks", version = "3.6")
     )
   )
-License: GPL (>= 3)
+License: GPL-3
 Depends: R (>= 4.1.0),
 Imports:
     imager,
