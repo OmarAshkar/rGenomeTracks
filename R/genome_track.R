@@ -34,14 +34,21 @@ setMethod(
 #' install_pyGenomeTracks()
 #' }
 #' @importFrom reticulate install_miniconda
+#' @importFrom reticulate conda_create
 #' @importFrom reticulate py_install
 #' @author Omar Elashkar
-install_pyGenomeTracks <- function() {
+install_pyGenomeTracks <- function(envname = "pyGenomeTracks") {
   tryCatch(install_miniconda(),
-    finally = py_install("pyGenomeTracks",
-      method = "conda",
-      pip = TRUE,
-      version = 3.6
+           finally = {
+            reticulate::conda_create(
+             envname = envname,
+             packages = NULL,
+             python_version = 3.6)
+             reticulate::py_install("pyGenomeTracks",
+                                method = "conda",
+                                envname = envname,
+                                pip = TRUE,
+                                python_version = 3.6)
+             }
     )
-  )
 }

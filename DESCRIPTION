@@ -1,6 +1,6 @@
 Package: rGenomeTracks
 Title: Integerated visualization of epigenomic data
-Version: 0.99.8
+Version: 0.99.9
 Authors@R: 
     person(given = "Omar",
            family = "Elashkar",
@@ -36,5 +36,6 @@ Suggests:
     knitr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+BugReports: https://github.com/OmarAshkar/rGenomeTracks
 VignetteBuilder: knitr
 biocViews: Software, HiC, Visualization

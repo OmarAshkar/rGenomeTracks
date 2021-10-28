@@ -1,6 +1,8 @@
 ---
-title: "rGenomeTracks"
+title: "Visualizing (Epi)Genome using rGenomeTracks"
 output: rmarkdown::html_vignette
+author: "Omar Elashkar"
+package: rGenomeTracks
 vignette: >
   %\VignetteIndexEntry{rGenomeTracks}
   %\VignetteEngine{knitr::rmarkdown}
@@ -22,26 +24,32 @@ here is no way currently to use it within R interactive session.
 rGenomeTracks wrapped the whole functionality of pyGenomeTracks with additional utilites
 to make to more pleasant for R users.
 
-```{r setup}
+```{r setup, eval = F}
 # loading the rGenomeTracks
 library(rGenomeTracks)
 # loading example data
-#library(rGenomeTracksData)
+library(rGenomeTracksData)
 ```
 
 
-## Installing PyGenomeTracks
-You should have pyGenomeTracks installed on R's loading environment. To avoid dependency clash, 
-we highly recommend using `install_pyGenomeTracks()`. That way, you ensure using the tested pyGenomeTracks version with the current release.  rGenomeTracks is supposed to automatically prompt you to install this dependency after running `plot_gtracks()`. If this step failed, you can manually install pyGenomeTracks with `install_pyGenomeTracks()`
+## Installing Dependencies
+You should have [pyGenomeTracks](https://github.com/deeptools/pyGenomeTracks) installed on R's loading environment. 
+To avoid dependency clash, we highly recommend using `install_pyGenomeTracks()`. That way, you ensure using the tested pyGenomeTracks version with the current release.  rGenomeTracks is supposed to automatically prompt you to install this dependency after running `plot_gtracks()`. If this step failed, you can manually install pyGenomeTracks with `install_pyGenomeTracks()`. 
 
-```{r eval=FALSE}
+
+```{r, eval=FALSE}
 install_pyGenomeTracks()
 ```
+By default, `install_pygenomeTracks` will create enviroment name called "pyGenometracks". If after successful installation, reticulate failed to automatically detect that environment, you can force its usage by running:
 
-
+```{r}
+library(reticulate)
+reticulate::use_condaenv("pyGenomeTracks", required = TRUE)
+```
 
 ## Principle
-rGenomeTracks deals creates tracks in a class `genome_track`. Currently, there are 14 tracks available:
+rGenomeTracks represents tracks by `genome_track` class. Currently, there are 14 tracks available:
+
 1. track_bed()
 2. track_bedgraph()
 3. track_bedgraph_matrix()
@@ -61,14 +69,20 @@ rGenomeTracks deals creates tracks in a class `genome_track`. Currently, there a
 Please refer to the help page for each one of them for details and examples.
 
 We will download .h5 matrix and store the location in temporary directory for demonstration.
-```{r eval=FALSE}
+```{r}
 # Download h5 example
 ah <- AnnotationHub()
-query(ah, "rGenomeTracksData")
-h5_dir <-  ah[["AH95901"]]
+files <- query(ah, "rGenomeTracksData")
 
- # Create HiC track from HiC matrix
- h5 <- track_hic_matrix(
+# rename the file to correct extension
+h5_i <- grep(x = files$title, pattern = ".*h5")
+h5_file <- ah[[names(files)[h5_i]]]
+h5_dir <- paste0(dirname(h5_file), "/", files$title[h5_i])
+file.copy(from = h5_file, to = h5_dir)
+
+
+# Create HiC track from HiC matrix
+h5 <- track_hic_matrix(
    file = h5_dir, depth = 250000, min_value = 5, max_value = 200,
    transform = "log1p", show_masked_bins = FALSE
  )
@@ -129,13 +143,13 @@ Additionally, `plot_gtracks()` requires the genomic region to be plotted. Option
  
 ```{r eval=FALSE}
  # Plot the tracks
-## Note to verify installing miniconda if not installed.
-
- layout(matrix(c(1,1,2,3,4,4), nrow = 3, ncol = 2, byrow = TRUE))
- plot_gtracks(tracks, chr = "X", start = 25 * 10^5, end = 31 * 10^5)
+layout(matrix(c(1,1,2,3,4,4), nrow = 3, ncol = 2, byrow = TRUE))
+par(mar = c(1, 1, 1, 1)) 
+plot_gtracks(tracks, chr = "X", start = 25 * 10^5, end = 31 * 10^5)
 
 # Plot HiC, TADS and bigwig tracks
- plot_gtracks(h5 + tads + bw, chr = "X", start = 25 * 10^5, end = 31 * 10^5)
+par(mar = c(1,1,1,1))
+plot_gtracks(h5 + tads + bw, chr = "X", start = 25 * 10^5, end = 31 * 10^5)
 ```
 
 ```{r echo=FALSE}
@@ -160,9 +174,9 @@ bed_tracks <- Reduce("+", bed_list)
 You can repeat this process for tracks of same category then pass the tracks to plot_gtracks()
 
 ### Create complex layout figures 
-You may choose create a complex figure using layout() and split.screen() function then save the device. 
-
-Note that you cannot make use of dir argument in plot_gtracks() if you used this method as it is passed to pyGenomeTracks. So, you have to capture R's graphic device and save it manually.
+As rGenometracks utilize base R graphics, you may choose create a complex figure using par(), layout() and split.screen() function 
+then save the device. However, note that you cannot make use of dir argument in plot_gtracks() 
+if you use these method as it is passed to pyGenomeTracks. So, you have to capture R's graphic device and save it manually.
 
 
 
