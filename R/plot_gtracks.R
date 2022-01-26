@@ -103,7 +103,7 @@ setGeneric("plot_gtracks", function(obj, chr, start, end,
 
 #' @rdname plot_gtracks
 #' @aliases plot_gtracks, genome_track
-#' @importFrom imager load.image
+#' @importFrom magick image_read
 #' @importFrom reticulate import
 #' @return None
 #' @export
@@ -175,8 +175,8 @@ setMethod("plot_gtracks", "genome_track", function(obj,
   py <- reticulate::import("os")
   py$system(cmd)
   if (plot) {
-    img <- imager::load.image(dir)
-    plot(img, axes = FALSE, ...)
+    magick::image_read(dir)
+  } else {
+    dir
   }
-  NULL
 })

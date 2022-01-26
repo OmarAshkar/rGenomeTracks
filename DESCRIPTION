@@ -23,10 +23,12 @@ Config/reticulate:
 License: GPL-3
 Depends: R (>= 4.1.0),
 Imports:
-    imager,
+    magick,
     reticulate,
     methods,
     rGenomeTracksData
+suggests:
+    cowplot
 SystemRequirements: pyGenomeTracks (prefered to use install_pyGenomeTracks())
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

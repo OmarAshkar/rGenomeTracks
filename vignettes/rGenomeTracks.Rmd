@@ -178,7 +178,45 @@ As rGenometracks utilize base R graphics, you may choose create a complex figure
 then save the device. However, note that you cannot make use of dir argument in plot_gtracks() 
 if you use these method as it is passed to pyGenomeTracks. So, you have to capture R's graphic device and save it manually.
 
+```{r}
+# Plot Manhattan
+a <- ggman::ggman(toy.gwas, snp = "snp", bp = "bp", chrom = "chrom", pvalue = "pvalue", title = "")
 
+
+# Plot TADS and bigwig
+b <-  plot_gtracks(h5 + tads +
+                     track_scalebar(scalebar_start_position = 26.4 * 10^5,
+                                    scalebar_end_position = 28.5 * 10^5,
+                                    line_width = 1 ),
+                   chr = "X", start = 25 * 10^5, end = 31 * 10^5, 
+                   width = 70, x = 1)
+
+# Zoom and rotate TADS
+c <-  plot_gtracks(h5 + tads , chr = "X", start = 26.4 * 10^5, 
+               end = 28.5 * 10^5, width = 70, x = 1) %>%
+  magick::image_rotate(-45) %>%
+  magick::image_crop("1000x1000+530+280") 
+
+
+png(filename = "test.png", width= 13, height =10, units = "in", res = 400 )
+cowplot::ggdraw() + 
+  cowplot::draw_plot(a,  x = 0.01, y = 0.5, width = 0.5, height= 0.5) +
+  cowplot::draw_image(b,  x = 0.025, y = 0.1, width = 0.55, height = 0.5)+
+  cowplot::draw_image(c, x = 0.55, y = 0.4, width = 0.5,  height = 0.5) + 
+  cowplot::draw_plot_label(c("A", "B", "C"), c(0, 0, 0.55), c(1, 0.5, 1), size = 15)
+dev.off()
+
+cowplot::plot_grid(plot_grid(a,b, nrow = 2, axis = "r", scale = c(1,1.1), labels = c("A", "B")), c, rel_heights = c(1.5, 1), align = "hv",  axis = "bt", scale = 0.9,  labels = c("", "C"))
+
+
+
+```
+
+```{r, include=FALSE}
+png(file = "int/extdata/images/LayoutsExample.png", width = 1727, height = 622, units = "px")
+
+dev.off()
+```
 
 ## Session Information 
 ```{r}
